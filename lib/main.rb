@@ -12,6 +12,7 @@ class Cb
   def generator
     code = []
     4.times { code.push(rand(1..6)) }
+    code
   end
 
   def guess
