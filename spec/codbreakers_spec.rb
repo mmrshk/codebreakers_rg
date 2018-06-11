@@ -1,6 +1,6 @@
-require "../lib/main.rb"
-describe Cb do
-  let(:subject) { Cb.new }
+require "../lib/game.rb"
+describe Game do
+  let(:subject) { Game.new }
   context 'When testing the #generator method'
   it 'returns an array size of 4' do
     ary_size = subject.generator.size
@@ -30,7 +30,7 @@ describe Cb do
   end
   context 'when testing #gues method'
   it 'returns array of integers' do
-    allow(subject).to receive(:gets) {'1234'}
+    allow(subject).to receive(:gets) { '1234' }
     expect(subject.guess).to eq [1, 2, 3, 4]
   end
 
@@ -79,7 +79,7 @@ describe Cb do
 
   context "when testing #hint method"
   it 'check that hint outputs correct value' do
-    expect { subject.hint([1, 2, 3, 4], ["+", "+", "+", "-"]) }.to output(/Number 4 is on position 4/).to_stdout
+    expect { subject.hint([1, 2, 3, 4], ['+', '+', '+', '-']) }.to output(/Number 4 is on position 4/).to_stdout
   end
 
 #    context "when testing #new_game method"
@@ -92,16 +92,16 @@ describe Cb do
 #    end
 
   context 'When testing #win class'
-  it 'test reset game' do
-    allow(subject).to receive(:gets) {'1'}
+  it 'test reset game if win' do
+    allow(subject).to receive(:gets).and_return('1', '4')
     expect(subject).to receive(:new_game).once
     subject.win
   end
 
   context 'When testing #lost class'
-  it do
-    allow(subject).to receive(:gets) {'1'}
+  it 'test reset game if lost' do
+    allow(subject).to receive(:gets).and_return('1', '4')
     expect(subject).to receive(:new_game).once
-    subject.win
+    subject.lost
   end
 end
