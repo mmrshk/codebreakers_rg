@@ -82,15 +82,6 @@ describe Game do
     expect { subject.hint([1, 2, 3, 4], ['+', '+', '+', '-']) }.to output(/Number 4 is on position 4/).to_stdout
   end
 
-#    context "when testing #new_game method"
-#
-#    it "checks that #hint? method is called" do
-#      subject.instance_variable_set(:@hint_available, true)
-#      allow(subject).to receive(:gets) {"2"}
-#      expect(subject).to receive(:hint?).at_least(10).times
-#     subject.new_game
-#    end
-
   context 'When testing #win class'
   it 'test reset game if win' do
     allow(subject).to receive(:gets).and_return('1', '4')
