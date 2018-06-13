@@ -1,7 +1,8 @@
 module Interface
   def prompt_decision
-    puts "1 - Enter code
-2 - Get a hint"
+    puts "Enter 4 1-6 digits or:
+h - get a hint
+q - exit game"
   end
 
   def guess_code_message
@@ -24,13 +25,23 @@ module Interface
     puts 'You dont have hints'
   end
 
-  def win_message
-    puts "Congratulations! You won the game!
-Please select:
+  def begin_game_message
+    puts "Please select:
+1 - Play game
+r - Write your result
+q - exit"
+  end
+
+  def self.end_game_message
+  puts "Please select:
 1 - Play again
-2 - View results
-3 - Write your result
-4 - exit"
+w - View results
+r - Write your result
+q - exit"
+  end
+
+  def win_message
+    puts 'Congratulations! You won the game!'
   end
 
   def incorrect_entry
@@ -38,10 +49,6 @@ Please select:
   end
 
   def lost_message
-    puts "Sorry, you lost
-Please select:
-1 - Play again
-2 - View results
-3 - exit"
+    puts "Sorry, you lost"
   end
 end

@@ -1,39 +1,28 @@
+require_relative 'interface.rb'
+require_relative 'processing_service.rb'
+require_relative 'menu.rb'
 #comment
 class Game
-  require_relative 'interface.rb'
+
   include Interface
-  @hint_available = true
+
   def initialize
-    @attempts = 5
+    @processing_service = ProcessingService.new
     @hint_available = true
     @code = []
-    @reults_array = []
+    @results_array = []
   end
 
   def generator
-    code = []
-    4.times { code.push(rand(1..6)) }
-    code
+    Array.new(4) { rand(1..6) }
   end
 
-  def guess
-    guess_code_message
-    gets.to_i.digits.reverse
+  def begining_game
+    Menu::begin_game
   end
 
-  def compare(generated, guess)
-    results_output = Array.new(4, ' ')
-    generated.zip(guess).each_with_index do |elements_by_their_place, index|
-      if elements_by_their_place.first == elements_by_their_place.last
-        results_output[index] = '+'
-      end
-      generated.each_with_index do |_variable, ind|
-        if results_output[index] == ' ' && elements_by_their_place.last == generated[ind]
-          results_output[index] = '-'
-        end
-      end
-    end
-    results_output
+  def ending_game
+    Menu::end_game
   end
 
   def attempt_used
@@ -49,52 +38,13 @@ class Game
   end
 
   def lost
-    loop do
-      lost_message
-      num = gets.to_i
-      case num
-      when 1
-        @hint_available = true
-        @attempts = 5
-        new_game
-      when 2 then view_results
-      when 3 then exit
-      else
-        incorrect_entry
-      end
-    end
-  end
-
-  def write_results
-    your_name
-    username = gets.chomp
-    results = 'results.txt'
-    File.open(results, 'a') { |file| file.write("#{username} finished game with #{@attempts -1} attempts left \n") }
-  end
-
-  def view_results
-    File.open('results.txt', 'r') do |f|
-      f.each_line do |line|
-        puts line
-      end
-    end
+    lost_message
+    ending_game
   end
 
   def win
-    loop do
-      win_message
-      num = gets.to_i
-      case num
-      when 1
-        @hint_available = true
-        @attempts = 5
-        new_game
-      when 2 then view_results
-      when 3 then write_results
-      when 4 then exit
-      else incorrect_entry
-      end
-    end
+    win_message
+    ending_game
   end
 
   def win?(compared)
@@ -103,44 +53,40 @@ class Game
     win
   end
 
-  def process_hint
-    hint(@code, @reults_array)
-    @hint_available = false
-  end
-
   def hint?
-    if @hint_available && @reults_array == nil
-      @reults_array = Array.new(4, ' ')
-      process_hint
+    if @hint_available && @results_array == nil
+      @results_array = Array.new(4, ' ')
+      @processing_service.hint(@code, @results_array)
+      @hint_available = false
     elsif @hint_available
-      process_hint
+    @processing_service.hint(@code, @results_array)
+    @hint_available = false
     else
       have_no_hints
     end
   end
 
-  def hint(generated_code, compared_array)
-    loop do
-      @hint_index = generated_code[rand(0..3)]
-      @hint_value = generated_code[@hint_index]
-      break if compared_array[@hint_index] != '+'
-    end
-    hint_message(@hint_value, @hint_index)
-  end
-
   def new_game
+    @hint_available = true
+    @attempts = 2
     p @code = generator
     loop do
       prompt_decision
-      choice = gets.to_i
+      choice = gets.chomp
+      choice
       case choice
-      when 1
-        @reults_array = compare(@code, guess)
-        p @reults_array
-        win?(@reults_array)
+      when /^[1-6]{4}$/
+        choice = choice.to_i.digits.reverse
+        @results_array = @processing_service.place_match(@code, choice)
+        p @results_array
+        @results_array = @processing_service.out_of_place_match(@results_array, @code, choice)
+        p @results_array
+#        p @results_array
+        win?(@results_array)
         lost?
         attempt_used
-      when 2 then hint?
+      when 'h' then hint?
+      when 'q' then exit
       else
         incorrect_entry
       end

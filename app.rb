@@ -1,4 +1,4 @@
-require_relative 'lib/game.rb'
-game = Game.new
+require_relative 'lib/menu.rb'
+menu = Menu.new
 puts 'Welcome to a game'
-game.new_game
+menu.begin_game
