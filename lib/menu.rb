@@ -1,6 +1,7 @@
 require_relative 'interface.rb'
 require_relative 'game.rb'
 require_relative 'data_manager.rb'
+require_relative 'processing_service.rb'
 
 class Menu
 
@@ -9,19 +10,21 @@ class Menu
   def initialize
     @game = Game.new
     @data_manager = DataManager.new
+    @processing_service = ProcessingService.new
   end
 
   def begin_game
     loop do
       begin_game_message
       choice = gets.chomp
-        case choice
+#      @processing_service.command(choice)
+      case choice
         when '1' then @game.new_game
         when 'r' then @data_manager.view_results
         when 'q' then exit
-        else
-          incorrect_entry
-        end
+       else
+         incorrect_entry
+      end
     end
   end
 

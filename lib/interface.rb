@@ -27,20 +27,20 @@ q - exit game"
 
   def begin_game_message
     puts "Please select:
-1 - Play game
+p - Play game
 r - Write your result
 q - exit"
   end
 
   def self.end_game_message
   puts "Please select:
-1 - Play again
-w - View results
-r - Write your result
+p - Play again
+w - Write results
+r - Read results
 q - exit"
   end
 
-  def win_message
+  def self.win_message
     puts 'Congratulations! You won the game!'
   end
 
@@ -48,7 +48,7 @@ q - exit"
     puts 'Please enter correct number'
   end
 
-  def lost_message
+  def self.lost_message
     puts "Sorry, you lost"
   end
 end

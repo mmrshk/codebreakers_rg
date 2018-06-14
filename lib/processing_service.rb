@@ -1,22 +1,42 @@
+require_relative 'game.rb'
 require_relative 'interface.rb'
 class ProcessingService
 
   include Interface
 
-#  def compare(code, guess)
-#    results_output = Array.new(4, ' ')
-#    code.zip(guess).each_with_index do |elements_by_their_place, index|
-#      if elements_by_their_place.first == elements_by_their_place.last
-#        results_output[index] = '+'
-#      end
-#      code.each_with_index do |_variable, ind|
-#        if results_output[index] == ' ' && elements_by_their_place.last == code[ind]
-#          results_output[index] = '-'
-#        end
-#      end
-#    end
-#    results_output
-#  end
+  def initialize
+    @hint_available = true
+    @code = generator
+    @results_array = []
+    @attempts = 2
+    @data_manager = DataManager.new
+  end
+
+  def generator
+    Array.new(4) { rand(1..6) }
+  end
+
+  def command(command_name)
+    @command = method_list(command_name) unless command_name.match(/^[1-6]{4}$/)
+    turn_processor(command_name)
+  end
+
+  def method_list(command)
+    commands = { h: hint?, w: @data_manager.write_results(@attempts), r: @data_manager.view_results, p: Game::new_game}
+  #  p commands[command]
+    commands[command.to_sym]
+  end
+
+  def turn_processor(guess)
+    p @code
+    guess = guess.to_i.digits.reverse
+    results_array = place_match(@code, guess)
+    results_array = out_of_place_match(results_array, @code, guess)
+    p results_array
+    win?(results_array)
+    attempt_used
+    lost?
+  end
 
   def place_match(code, guess)
     results_output = Array.new(4, ' ')
@@ -29,18 +49,13 @@ class ProcessingService
   end
 
   def out_of_place_match(results_output, code, guess)
-    guess.each_with_index do |_variable, index|
-      if guess[index] == code.each { |number| number } && results_output[index] == ' '
-        results_output[index] = '-'
-      end
-      results_output
+    matched_values = guess & code
+    guess.each_with_index do |number, index|
+        if matched_values.include?(number)
+          results_output[index] = '-' unless results_output[index] == '+'
+        end
     end
-#    code.each_with_index do |_variable, ind|
-#      if results_output[index] == ' ' && elements_by_their_place.last == code[ind]
-#        results_output[index] = '-'
-#      end
-#      results_output
-#    end  
+    results_output
   end
 
   def hint(code, compared_array)
@@ -52,19 +67,31 @@ class ProcessingService
     hint_message(@hint_value, @hint_index)
   end
 
-#  def end_game
-#    loop do
-#      num = gets.to_i
-#      case num
-#      when 1
-#        @hint_available = true
-#        @attempts = 5
-#        new_game
-#      when 2 then view_results
-#      when 3 then write_results
-#      when 4 then exit
-#      else incorrect_entry
-#      end
-#    end 
-#  end
+    def win?(compared)
+    win_condition = Array.new(4, '+')
+    return Game::win  unless win_condition != compared
+  end
+
+  def hint?
+    if @hint_available && @results_array == nil
+      @results_array = Array.new(4, ' ')
+      hint(@code, @results_array)
+      @hint_available = false
+    elsif @hint_available
+      hint(@code, @results_array)
+      @hint_available = false
+    else
+      have_no_hints
+    end
+  end
+
+  def attempt_used
+    @attempts -= 1
+  end
+
+  def lost?
+    return Game::lost unless @attempts > 0
+    attempts_left(@attempts)
+  end
 end
+
