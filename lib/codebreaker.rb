@@ -6,5 +6,5 @@ require_relative 'codebreaker/processor.rb'
 
 
 module Codebreaker
-  # Your code goes here...
+  VERSION = "0.2.0"
 end
