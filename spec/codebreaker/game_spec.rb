@@ -1,5 +1,6 @@
-require "../lib/game.rb"
-require "../lib/processor.rb"
+#require "../lib/game.rb"
+#require "../lib/processor.rb"
+require 'spec_gelper'
 describe Game do
 
   context 'when testing #generator method' do

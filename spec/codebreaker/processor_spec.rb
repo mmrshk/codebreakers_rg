@@ -1,4 +1,5 @@
-require "../lib/processor.rb"
+#require "../lib/processor.rb"
+require 'spec_gelper'
 
 describe Processor do
   context 'when testing #place_match method'do

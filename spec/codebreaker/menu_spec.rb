@@ -1,5 +1,7 @@
-require "../lib/menu.rb"
-require "../lib/game.rb"
+#require "../lib/menu.rb"
+#require "../lib/game.rb"
+require "spec_helper.rb"
+
 
 describe Menu do
   context 'when testing #start_game method' do
