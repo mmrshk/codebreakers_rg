@@ -2,7 +2,6 @@
 #require "../lib/game.rb"
 require "spec_helper.rb"
 
-
 describe Menu do
   context 'when testing #start_game method' do
     it 'returns @game.new_game' do
