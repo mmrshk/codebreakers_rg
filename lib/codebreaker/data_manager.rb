@@ -7,7 +7,7 @@ class DataManager
   end
 
   def view_results
-    File.open('results.txt', 'r') do |f|
+    File.open('./db/results.txt', 'r') do |f|
       f.each_line do |line|
         puts line
       end
