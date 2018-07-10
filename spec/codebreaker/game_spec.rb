@@ -1,8 +1,5 @@
-#require "../lib/game.rb"
-#require "../lib/processor.rb"
 require 'spec_helper'
 describe Game do
-
   context 'when testing #generator method' do
     it 'checks that number matches a regex template' do
       expect(subject.generator.join).to match(/^[1-6]{4}$/)
@@ -22,18 +19,17 @@ describe Game do
     end
   end
 
-  context 'when testing #check_hint mehod' do
+  context 'when testing #show_hint mehod' do
     it 'returns no_hint_message when hint was used before' do
       subject.instance_variable_set(:@hint_available, false)
       expect(subject).to receive(:have_no_hints_message)
-      subject.check_hint
+      subject.show_hint
     end
   end
 
   context 'when testing #new_game method' do
     it 'tests new_game process' do
       expect(subject).to receive(:loop).and_yield
-#     allow(subject).to receive(:gets).and_return('1234')
       expect(subject).to receive(:choice_processor).once
       expect(subject).to receive(:attempts).once
       expect(subject).to receive(:win).once
@@ -45,7 +41,7 @@ describe Game do
     it 'calls hint_processor method when hint is available' do
       subject.instance_variable_set(:@hint_avaliable, true)
       expect_any_instance_of(Processor).to receive(:hint_processor).and_return([1, 2, 3, 4])
-      subject.check_hint
+      subject.show_hint
     end
   end
   
@@ -62,9 +58,9 @@ describe Game do
       subject.choice_processor
     end
 
-    it 'calls #check_hint' do
+    it 'calls #show_hint' do
       allow(subject).to receive(:gets).and_return('h')
-      expect(subject).to receive(:check_hint)
+      expect(subject).to receive(:show_hint)
       subject.choice_processor
     end
   end

@@ -5,6 +5,8 @@ require_relative 'interface.rb'
 # Comment
 class Game
   include Interface
+  WIN_CONDITION = Array.new(4, '+')
+  YES = 'yes'.freeze
 
   def initialize
     @processor = Processor.new
@@ -29,11 +31,10 @@ class Game
       result = choice_processor
       attempts
       win(result)
-      break if @game_end
+      break if game_end?
       lost
-      break if @game_end
+      break if game_end?
     end
-    save_results_message
     save_results?
   end
 
@@ -42,8 +43,7 @@ class Game
   end
 
   def win(result)
-    win_condition = Array.new(4, '+')
-    return unless result == win_condition
+    return unless result == WIN_CONDITION
     win_game_message
     @game_end = true
   end
@@ -54,16 +54,21 @@ class Game
     @game_end = true
   end
 
+  def game_end?
+    @game_end
+  end
+
   def choice_processor
     command = gets.chomp
     commands.dig(command.to_sym).call unless command =~ /^[1-6]{4}$/
     @processor.turn_processor(@code, command)
+    @processor.display_results
   rescue
-    puts 'Please give a valid command'
+    incorrect_entry_message
     retry
   end
 
-  def check_hint
+  def show_hint
     return have_no_hints_message unless @hint_avaliable == true
     @processor.hint_processor(@code)
     @hint_avaliable = false
@@ -74,13 +79,14 @@ class Game
   end
 
   def save_results?
+    save_results_message
     choice = gets.chomp.downcase
-    choice == 'yes' ? @manager.write_results(@attempts, @hint_avaliable) : ' '
+    @manager.write_results(@attempts, @hint_avaliable) if choice == YES
   end
 
   def commands
     {
-      h: -> { check_hint },
+      h: -> { show_hint },
       q: -> { exit_game }
     }
   end

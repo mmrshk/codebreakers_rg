@@ -1,6 +1,7 @@
 require_relative 'interface.rb'
 # comment
 class Processor
+  RESULTS_OUTPUT = Array.new(4, ' ')
   def initialize
     @attempts = 3
   end
@@ -10,19 +11,18 @@ class Processor
     p code
     guess = guess.to_i.digits.reverse
     results_array = place_match(code, guess)
-    results_array = out_of_place_match(results_array, code, guess)
     attempt_used
-    p results_array
-    results_array
+    @results_array = out_of_place_match(results_array, code, guess)
+  end
+
+  def display_results
+    p @results_array
   end
 
   def place_match(code, guess)
-    results_output = Array.new(4, ' ')
-    code.zip(guess).each_with_index do |elements_by_their_place, index|
-      if elements_by_their_place.first == elements_by_their_place.last
-        results_output[index] = '+'
-      end
-    end
+    results_output = RESULTS_OUTPUT
+    code.zip(guess).each_with_index { |elements_by_their_place, index|
+       results_output[index] = '+' if elements_by_their_place.uniq! }
     results_output
   end
 
