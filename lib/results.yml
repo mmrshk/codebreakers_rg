@@ -1,2 +1,15 @@
-["u. s, r", 5, true]
-["u. s, r", 5, true]
+---
+:result:
+  :name: Jack
+  :attempts_left: 3
+  :hint_available: true
+---
+:result:
+  :name: Richie
+  :attempts_left: 2
+  :hint_available: false
+---
+:result:
+  :name: Mark
+  :attempts_left: 3
+  :hint_available: true

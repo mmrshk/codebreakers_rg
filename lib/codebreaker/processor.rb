@@ -3,7 +3,7 @@ require_relative 'interface.rb'
 class Processor
   RESULTS_OUTPUT = Array.new(4, ' ')
   def initialize
-    @attempts = 3
+    @attempts = 5
   end
 
   include Interface

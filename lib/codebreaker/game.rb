@@ -1,9 +1,10 @@
 require_relative 'processor.rb'
 require_relative 'data_manager.rb'
 require_relative 'interface.rb'
+require_relative 'command_manager.rb'
 
 # Comment
-class Game
+class Game < CommandManager
   include Interface
   WIN_CONDITION = Array.new(4, '+')
   YES = 'yes'.freeze
@@ -19,7 +20,7 @@ class Game
 
   def game_preparations
     @code = generator
-    @attempts = 3
+    @attempts = 5
     @game_end = false
     @hint_avaliable = true
   end
@@ -28,7 +29,7 @@ class Game
     game_preparations
     turn_start_message
     loop do
-      result = choice_processor
+      result = action_processor
       attempts
       win(result)
       break if game_end?
@@ -58,14 +59,14 @@ class Game
     @game_end
   end
 
-  def choice_processor
+  def action_processor
     command = gets.chomp
-    commands.dig(command.to_sym).call unless command =~ /^[1-6]{4}$/
+    choice_processor(command) unless command =~ /^[1-6]{4}$/
     @processor.turn_processor(@code, command)
     @processor.display_results
-  rescue
-    incorrect_entry_message
-    retry
+#  rescue
+#    incorrect_entry_message
+#    retry
   end
 
   def show_hint
@@ -74,9 +75,9 @@ class Game
     @hint_avaliable = false
   end
 
-  def exit_game
-    exit
-  end
+  # def exit_game
+  #   exit
+  # end
 
   def save_results?
     save_results_message
@@ -84,10 +85,10 @@ class Game
     @manager.write_results(@attempts, @hint_avaliable) if choice == YES
   end
 
-  def commands
-    {
-      h: -> { show_hint },
-      q: -> { exit_game }
-    }
-  end
+#  def commands
+#    {
+#     h: -> { show_hint },
+#      q: -> { exit_game }
+#    }
+#  end
 end

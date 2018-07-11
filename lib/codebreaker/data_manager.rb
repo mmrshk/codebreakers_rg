@@ -1,20 +1,19 @@
 # comment
+require 'yaml'
 class DataManager
   def write_results(attempts, hint)
-    game_result = []
-    # username = gets.chomp
-    username = 'u. s, r'
+    
+    username = gets.chomp
     results = './lib/results.yml'
-    game_result.push(username).push(attempts).push(hint)
-    File.open(results, 'a') { |file| file.write(game_result) }
-    File.open(results, 'a') { |file| file.write("\n") }
+    game_result = {result: {name: username, attempts_left: attempts, hint_available: hint}}.to_yaml
+    File.open(results, 'a') { |file| file.write(game_result).to_yaml }
   end
 
   def view_results
-#    puts File.read('./lib/results.yml')
-    results = File.open('./lib/results.yml')
-    results.each_line do |line|
-    #  puts "User #{line[0]} have finished game with #{line[1]} attempts left. Hint left: #{line[2]} "
+    results = YAML.load_file('./lib/results.yml')
+    p results
+    results.each_value do |value|
+      puts 'User: ' + value[:name].to_s + ', attempts left: ' + value[:attempts_left].to_s + ', hint available: ' + value[:hint_available].to_s
     end
   end
 end
