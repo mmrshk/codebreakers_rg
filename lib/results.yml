@@ -1,15 +1,23 @@
 ---
-:result:
-  :name: Jack
-  :attempts_left: 3
+:results:
+- :username: Jack
+  :attempts_left: 1
   :hint_available: true
----
-:result:
-  :name: Richie
-  :attempts_left: 2
+- :username: Jack
+  :attempts_left: 1
+  :hint_available: true
+- :username: Jack
+  :attempts_left: 1
+  :hint_available: 'true'
+- :username: Jack
+  :attempts_left: 1
+  :hint_available: true
+- :username: Jack
+  :attempts_left: 1
+  :hint_available: true
+- :username: Jack
+  :attempts_left: 3
   :hint_available: false
----
-:result:
-  :name: Mark
+- :username: Kollins
   :attempts_left: 3
-  :hint_available: true
+  :hint_available: false

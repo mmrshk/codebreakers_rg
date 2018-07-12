@@ -64,9 +64,9 @@ class Game < CommandManager
     choice_processor(command) unless command =~ /^[1-6]{4}$/
     @processor.turn_processor(@code, command)
     @processor.display_results
-#  rescue
-#    incorrect_entry_message
-#    retry
+  rescue
+    incorrect_entry_message
+    retry
   end
 
   def show_hint
@@ -75,20 +75,9 @@ class Game < CommandManager
     @hint_avaliable = false
   end
 
-  # def exit_game
-  #   exit
-  # end
-
   def save_results?
     save_results_message
     choice = gets.chomp.downcase
     @manager.write_results(@attempts, @hint_avaliable) if choice == YES
   end
-
-#  def commands
-#    {
-#     h: -> { show_hint },
-#      q: -> { exit_game }
-#    }
-#  end
 end

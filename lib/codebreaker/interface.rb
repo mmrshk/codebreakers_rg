@@ -45,6 +45,11 @@ r - view results
 q - exit game"
   end
 
+  def result_output (name, attempts, hint)
+    puts "User: #{name}, attempts left: #{attempts}, hint available: #{hint}"
+
+  end
+
   def result_save_message(username, attempts, hint)
     message =  "#{Time.now}: #{username} finished game with #{attempts} attempts left. Hint used: #{hint} \n"
     message
