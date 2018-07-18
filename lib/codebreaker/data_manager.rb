@@ -2,14 +2,16 @@ require 'yaml'
 # comment
 class DataManager
   include Interface
+
+  PATH = './lib/results.yml'.freeze
+
   def write_results(attempts, hint)
     your_name
     username = gets.chomp
     game_result = { username: username, attempts_left: attempts, hint_available: hint}
-    path = './lib/results.yml'
-    data = YAML.load_file path
+    data = YAML.load_file PATH
     data[:results] << game_result
-    file = File.open(path, 'w')
+    file = File.open(PATH, 'w')
     file.write(data.to_yaml)
     file.close
   end

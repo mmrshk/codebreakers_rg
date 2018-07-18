@@ -9,6 +9,7 @@ require "codebreaker"
 # (If you use this, don't forget to add pry to your Gemfile!)
 # require "pry"
 # Pry.start
-
+FILE = '../lib/codebreaker/app.rb'
 require "irb"
+$menu = Menu.new
 IRB.start(__FILE__)

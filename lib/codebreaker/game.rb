@@ -20,39 +20,38 @@ class Game < CommandManager
 
   def game_preparations
     @code = generator
-    @attempts = 5
     @game_end = false
     @hint_avaliable = true
+    @processor.reset_attempts
   end
 
   def new_game
     game_preparations
     turn_start_message
     loop do
+      attempts_left(attempts)
       result = action_processor
       attempts
-      win(result)
-      break if game_end?
-      lost
-      break if game_end?
+      break if win?(result)
+      break if lost?
     end
     save_results?
   end
 
   def attempts
-    @attempts = @processor.attempts_left
+    @attempts = @processor.attempts
   end
 
-  def win(result)
+  def win?(result)
     return unless result == WIN_CONDITION
     win_game_message
-    @game_end = true
+    true
   end
 
-  def lost
+  def lost?
     return unless @attempts.zero?
     lost_game_message
-    @game_end = true
+    true
   end
 
   def game_end?
@@ -61,7 +60,7 @@ class Game < CommandManager
 
   def action_processor
     command = gets.chomp
-    choice_processor(command) unless command =~ /^[1-6]{4}$/
+    return choice_processor(command) unless command =~ /^[1-6]{4}$/
     @processor.turn_processor(@code, command)
     @processor.display_results
   rescue
@@ -70,7 +69,7 @@ class Game < CommandManager
   end
 
   def show_hint
-    return have_no_hints_message unless @hint_avaliable == true
+    return have_no_hints_message unless @hint_avaliable
     @processor.hint_processor(@code)
     @hint_avaliable = false
   end
@@ -78,6 +77,6 @@ class Game < CommandManager
   def save_results?
     save_results_message
     choice = gets.chomp.downcase
-    @manager.write_results(@attempts, @hint_avaliable) if choice == YES
+    @manager.write_results(attempts, @hint_avaliable) if choice == YES
   end
 end

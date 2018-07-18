@@ -1,9 +1,11 @@
 require_relative 'interface.rb'
 # comment
 class Processor
+  attr_reader :attempts
   RESULTS_OUTPUT = Array.new(4, ' ')
+  ATTEMPTS = 5
   def initialize
-    @attempts = 5
+    @attempts = ATTEMPTS
   end
 
   include Interface
@@ -29,9 +31,7 @@ class Processor
   def out_of_place_match(results_output, code, guess)
     matched_values = guess & code
     guess.each_with_index do |number, index|
-      if matched_values.include?(number)
-        results_output[index] = '-' unless results_output[index] == '+'
-      end
+      results_output[index] = '-' unless results_output[index] == '+' if matched_values.include?(number)
     end
     results_output
   end
@@ -45,7 +45,7 @@ class Processor
     @attempts -= 1
   end
 
-  def attempts_left
-    @attempts
+  def reset_attempts
+    @attempts = ATTEMPTS
   end
 end
